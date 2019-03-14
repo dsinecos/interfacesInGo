@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 )
@@ -16,22 +17,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	// fmt.Println(res.Status)
-	printHeader(res.Header)
-
-	bs := make([]byte, 99999)
-
-	res.Body.Read(bs)
-	fmt.Println(string(bs))
-
-}
-
-func printHeader(m http.Header) {
-	for key, headerValues := range m {
-		fmt.Println(key)
-
-		for _, value := range headerValues {
-			fmt.Println("\t" + value)
-		}
-	}
+	io.Copy(os.Stdout, res.Body)
 }
